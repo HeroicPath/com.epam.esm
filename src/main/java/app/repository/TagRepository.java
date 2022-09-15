@@ -15,4 +15,6 @@ public interface TagRepository {
     void create(TagDto tag);
 
     void delete(Integer id);
+
+    Tag getByName(String name);
 }

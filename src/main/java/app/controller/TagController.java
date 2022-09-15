@@ -2,39 +2,42 @@ package app.controller;
 
 import app.dto.TagDto;
 import app.service.TagService;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tags")
 public class TagController {
 
-    private final TagService service;
+    private final TagService tagService;
 
-    public TagController(TagService service) {
-        this.service = service;
+    public TagController(TagService tagService) {
+        this.tagService = tagService;
     }
 
-//    @GetMapping
-//    public List<TagDto> index() {
-//        return service.getAll();
-//    }
+    @GetMapping
+    public List<TagDto> index() {
+        return tagService.getAll();
+    }
 
-    @GetMapping(value = "/single/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TagDto> get(@PathVariable int id) {
-        return ResponseEntity.ok()
-                .contentType(new MediaType("application","json"))
-                .body(new TagDto("success"));
+    @GetMapping("/{id}")
+    public TagDto getById(@PathVariable int id) {
+        return tagService.get(id);
+    }
+
+    @GetMapping("/name/{name}")
+    public TagDto getByName(@PathVariable String name) {
+        return tagService.getByName(name);
     }
 
     @PostMapping
-    public void create(TagDto tag) {
-        service.create(tag);
+    public void create(@RequestBody TagDto tag) {
+        tagService.create(tag);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        service.delete(id);
+    public void deleteById(@PathVariable Integer id) {
+        tagService.delete(id);
     }
 }

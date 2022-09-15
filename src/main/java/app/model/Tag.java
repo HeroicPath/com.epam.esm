@@ -1,6 +1,9 @@
 package app.model;
 
+import app.dto.GiftCertificateDto;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Tag {
@@ -15,9 +18,12 @@ public class Tag {
     )
     String name;
 
-    public Tag(Integer id, String name) {
+    List<GiftCertificateDto> giftCertificates;
+
+    public Tag(Integer id, String name, List<GiftCertificateDto> giftCertificates) {
         this.id = id;
         this.name = name;
+        this.giftCertificates = giftCertificates;
     }
 
     public Tag() {
@@ -37,5 +43,13 @@ public class Tag {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<GiftCertificateDto> getGiftCertificates() {
+        return giftCertificates;
+    }
+
+    public void setGiftCertificates(List<GiftCertificateDto> giftCertificates) {
+        this.giftCertificates = giftCertificates;
     }
 }

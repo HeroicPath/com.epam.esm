@@ -11,6 +11,7 @@ public class TagMapper {
         TagDto dto = new TagDto();
 
         dto.setName(tag.getName());
+        dto.setGiftCertificateList(tag.getGiftCertificates());
 
         return dto;
     }

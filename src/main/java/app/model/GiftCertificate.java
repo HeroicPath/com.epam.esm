@@ -1,10 +1,8 @@
 package app.model;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class GiftCertificate {
@@ -13,7 +11,6 @@ public class GiftCertificate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @Column(length = 30)
     String name;
 
     @ManyToMany
@@ -23,16 +20,16 @@ public class GiftCertificate {
     )
     String description;
 
-    @NotBlank(message = "Enter the price")
     Double price;
 
-    @Max(99)
     Integer duration;
 
     LocalDateTime create_date;
     LocalDateTime last_update_date;
 
-    public GiftCertificate(Integer id, String name, String description, Double price, Integer duration, LocalDateTime create_date, LocalDateTime last_update_date) {
+    List<Tag> tagList;
+
+    public GiftCertificate(Integer id, String name, String description, Double price, Integer duration, LocalDateTime create_date, LocalDateTime last_update_date, List<Tag> tagList) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -40,6 +37,7 @@ public class GiftCertificate {
         this.duration = duration;
         this.create_date = create_date;
         this.last_update_date = last_update_date;
+        this.tagList = tagList;
     }
 
     public GiftCertificate() {
@@ -99,5 +97,13 @@ public class GiftCertificate {
 
     public void setLast_update_date(LocalDateTime last_update_date) {
         this.last_update_date = last_update_date;
+    }
+
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public class TagRepositoryImpl implements TagRepository {
 
-    final JdbcTemplate template;
+    private final JdbcTemplate template;
 
     public TagRepositoryImpl(JdbcTemplate template) {
         this.template = template;
@@ -27,17 +27,22 @@ public class TagRepositoryImpl implements TagRepository {
     public Tag get(Integer id) {
         return template.query("SELECT * FROM tags WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class))
                 .stream().findAny().orElse(null);
-        //        TODO create an exception
+    }
+
+    @Override
+    public Tag getByName(String name) {
+        return template.query("SELECT * FROM tags WHERE name=?", new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class))
+                .stream().findAny().orElse(null);
     }
 
     @Override
     public void create(TagDto tag) {
-        template.update("INSERT INTO tags VALUES(DEFAULT, ?)",
-                tag.getName());
+        template.update("INSERT INTO tags (name) VALUES (?)", tag.getName());
     }
 
     @Override
     public void delete(Integer id) {
+        template.update("DELETE FROM gift_certificates_tags WHERE tag_id=?", id);
         template.update("DELETE FROM tags WHERE id=?", id);
     }
 }
