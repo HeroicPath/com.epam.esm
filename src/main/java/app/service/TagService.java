@@ -31,10 +31,6 @@ public class TagService {
         this.giftCertificateRepository = giftCertificateRepository;
     }
 
-    public List<TagDto> getAll() {
-        List<Tag> list = repository.getAll();
-        return list.stream().map(tag -> toDtoWithGiftCertificateDtos(tag, tag.getId())).collect(Collectors.toList());
-    }
 
     public TagDto get(Integer id) {
         Tag tag = repository.getById(id);

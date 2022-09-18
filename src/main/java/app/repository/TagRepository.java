@@ -4,11 +4,7 @@ package app.repository;
 import app.dto.TagDto;
 import app.model.Tag;
 
-import java.util.List;
-
 public interface TagRepository {
-
-    List<Tag> getAll();
 
     Tag getById(Integer id);
 

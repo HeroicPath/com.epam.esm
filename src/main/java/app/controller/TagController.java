@@ -4,8 +4,6 @@ import app.dto.TagDto;
 import app.service.TagService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/tags")
 public class TagController {
@@ -14,11 +12,6 @@ public class TagController {
 
     public TagController(TagService tagService) {
         this.tagService = tagService;
-    }
-
-    @GetMapping
-    public List<TagDto> index() {
-        return tagService.getAll();
     }
 
     @GetMapping("/{id}")

@@ -7,8 +7,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public class TagRepositoryImpl implements TagRepository {
 
@@ -16,11 +14,6 @@ public class TagRepositoryImpl implements TagRepository {
 
     public TagRepositoryImpl(JdbcTemplate template) {
         this.template = template;
-    }
-
-    @Override
-    public List<Tag> getAll() {
-        return template.query("SELECT * FROM tags", new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
