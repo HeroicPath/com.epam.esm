@@ -37,7 +37,7 @@ public class TagService {
     }
 
     public TagDto get(Integer id) {
-        Tag tag = repository.get(id);
+        Tag tag = repository.getById(id);
         return toDtoWithGiftCertificateDtos(tag, id);
     }
 
@@ -54,7 +54,7 @@ public class TagService {
     }
 
     public void delete(Integer id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
     public List<GiftCertificate> getGiftCertificates(Integer id) {

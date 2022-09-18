@@ -10,11 +10,11 @@ public interface TagRepository {
 
     List<Tag> getAll();
 
-    Tag get(Integer id);
+    Tag getById(Integer id);
 
     void create(TagDto tag);
 
-    void delete(Integer id);
+    void deleteById(Integer id);
 
     Tag getByName(String name);
 }

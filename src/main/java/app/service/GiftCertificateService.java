@@ -96,7 +96,7 @@ public class GiftCertificateService {
 
     public List<Tag> getTags (Integer id){
         List<Integer> tagIds = template.queryForList("SELECT tag_id FROM gift_certificates_tags WHERE gc_id=?", Integer.class, id);
-        return tagIds.stream().map(tagRepository::get).collect(Collectors.toList());
+        return tagIds.stream().map(tagRepository::getById).collect(Collectors.toList());
     }
 
     public GiftCertificateDto toDtoWithTags(GiftCertificate giftCertificate, Integer id) {

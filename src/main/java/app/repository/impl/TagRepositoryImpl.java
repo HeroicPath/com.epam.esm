@@ -24,15 +24,13 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Tag get(Integer id) {
-        return template.query("SELECT * FROM tags WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class))
-                .stream().findAny().orElse(null);
+    public Tag getById(Integer id) {
+        return template.queryForObject("SELECT * FROM tags WHERE id=?", new BeanPropertyRowMapper<>(Tag.class), id);
     }
 
     @Override
     public Tag getByName(String name) {
-        return template.query("SELECT * FROM tags WHERE name=?", new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class))
-                .stream().findAny().orElse(null);
+        return template.queryForObject("SELECT * FROM tags WHERE name=?", new BeanPropertyRowMapper<>(Tag.class), name);
     }
 
     @Override
@@ -41,7 +39,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         template.update("DELETE FROM gift_certificates_tags WHERE tag_id=?", id);
         template.update("DELETE FROM tags WHERE id=?", id);
     }
