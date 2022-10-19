@@ -1,9 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/gift_certificates_db
-    username: postgres
-    password: Gates_222
+    url: jdbc:h2:mem:default
+    username: sa
+    password: sa
+    driver-class-name: org.H2.Driver
   jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create
+    hibernate.ddl-auto: create-drop

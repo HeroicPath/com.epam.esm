@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/new_db
+    username: postgres
+    password: postgres

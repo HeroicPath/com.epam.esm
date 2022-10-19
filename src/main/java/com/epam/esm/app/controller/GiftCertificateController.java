@@ -2,9 +2,8 @@ package com.epam.esm.app.controller;
 
 
 import com.epam.esm.app.dto.GiftCertificateDto;
-import com.epam.esm.app.model.Holder;
+import com.epam.esm.app.dto.Holder;
 import com.epam.esm.app.service.GiftCertificateService;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -80,10 +79,9 @@ public class GiftCertificateController {
      */
     @PostMapping
     public void create(@RequestBody Holder holder) {
-        if (ObjectUtils.isEmpty(holder)){
-//            throw new LocalException(HttpStatus.BAD_REQUEST, "You need to specify the gift certificate data");
+        if (holder.getCertificate() == null){
+            throw new NullPointerException("You need to provide data for the Gift Certificate you are trying to create!");
         }
-        // TODO: 07.10.2022 fix exception throwing
         service.create(holder.getCertificate(),
                         holder.getTag());
     }
@@ -112,4 +110,8 @@ public class GiftCertificateController {
     public void deleteById(@PathVariable Integer id) {
         service.deleteById(id);
     }
+
+    /*public validateGiftCertificateDto(GiftCertificateDto giftCertificateDto) {
+
+    }*/
 }

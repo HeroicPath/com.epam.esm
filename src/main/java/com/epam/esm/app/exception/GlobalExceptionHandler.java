@@ -1,10 +1,12 @@
 package com.epam.esm.app.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,7 +27,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        localThrowableMessage = new LocalThrowableMessage(status, ex.getLocalizedMessage());
+        localThrowableMessage = new LocalThrowableMessage(status, "Your request was not valid");
+        return handleExceptionInternal(ex, localThrowableMessage, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        localThrowableMessage = new LocalThrowableMessage(HttpStatus.BAD_REQUEST, "You provided wrong data type for POST request");
         return handleExceptionInternal(ex, localThrowableMessage, headers, status, request);
     }
 
@@ -36,20 +44,33 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<Object> handleEmptyResultDataAccessException (){
+    public ResponseEntity<Object> emptyResultDataAccessExceptionHandler (){
         LocalThrowableMessage localThrowableMessage = new LocalThrowableMessage(HttpStatus.NOT_FOUND, "No object found by your request");
         return new ResponseEntity<>(localThrowableMessage, localThrowableMessage.getHttpStatus());
     }
 
-    /*@ExceptionHandler(DuplicateKeyException.class)
+    @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<Object> duplicateKeyExceptionHandler(DuplicateKeyException ex, HttpHeaders headers, HttpStatus status, WebRequest request){
-        return handleExceptionInternal()
-        return new LocalException("There is already an entity with such name, please enter another one");
-    }*/
+        LocalThrowableMessage localThrowableMessage = new LocalThrowableMessage(HttpStatus.NOT_FOUND, "There is already an entity with such name, please enter another one");
+        return new ResponseEntity<>(localThrowableMessage, localThrowableMessage.getHttpStatus());
+    }
 
-    /*@ExceptionHandler(Exception.class)
-    public @ResponseBody
-    LocalException generalExceptionHandler(){
-        return new LocalException("Something went wrong");
-    }*/
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Object> nullPointerExceptionHandler(Exception ex){
+        LocalThrowableMessage localThrowableMessage = new LocalThrowableMessage(HttpStatus.NOT_FOUND,
+                                                                                    ex.getMessage() == null ? ex.getLocalizedMessage() : ex.getMessage());
+        return new ResponseEntity<>(localThrowableMessage, localThrowableMessage.getHttpStatus());
+    }
+
+    @ExceptionHandler(LocalException.class)
+    public ResponseEntity<Object> localExceptionHandler(LocalException ex){
+        LocalThrowableMessage localThrowableMessage = new LocalThrowableMessage(ex.getStatus(), ex.getMessage());
+        return new ResponseEntity<>(localThrowableMessage, localThrowableMessage.getHttpStatus());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> generalExceptionHandler(Exception ex){
+        LocalThrowableMessage localThrowableMessage = new LocalThrowableMessage(HttpStatus.CONFLICT, ex.getLocalizedMessage());
+        return new ResponseEntity<>(localThrowableMessage, localThrowableMessage.getHttpStatus());
+    }
 }

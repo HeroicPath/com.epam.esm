@@ -1,9 +1,3 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5433/gift_certificates_db
-    username: postgres
-    password: Gates_222
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create
+  profiles:
+    active: @activatedProperties@

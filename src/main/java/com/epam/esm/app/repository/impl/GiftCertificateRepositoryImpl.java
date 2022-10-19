@@ -1,9 +1,11 @@
 package com.epam.esm.app.repository.impl;
 
 import com.epam.esm.app.dto.GiftCertificateDto;
+import com.epam.esm.app.exception.LocalException;
 import com.epam.esm.app.model.GiftCertificate;
 import com.epam.esm.app.model.Tag;
 import com.epam.esm.app.repository.GiftCertificateRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -92,14 +94,20 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     public boolean isPresentByParameter(String parameter, String parameterType) {
-        List<String> parameters = jdbcTemplate.queryForStream("SELECT * FROM gift_certificates", new BeanPropertyRowMapper<>(GiftCertificate.class)).map(parameterType.equals("name") ? GiftCertificate::getName : GiftCertificate::getDescription).collect(Collectors.toList());
+        List<String> parameters = jdbcTemplate.queryForStream("SELECT * FROM gift_certificates", new BeanPropertyRowMapper<>(GiftCertificate.class))
+                                                .map(parameterType.equals("name") ? GiftCertificate::getName : GiftCertificate::getDescription)
+                                                .collect(Collectors.toList());
         return parameters.contains(parameter);
     }
 
     public GiftCertificate likeCallByParameter(String parameter, String parameterType){
         String sql = "SELECT * FROM gift_certificates WHERE " + parameterType + " LIKE ? ORDER BY name, create_date";
-        List<GiftCertificate> resultList = jdbcTemplate.queryForStream(sql, new BeanPropertyRowMapper<>(GiftCertificate.class), "%" + parameter + "%").collect(Collectors.toList());
-        boolean isEmpty = resultList.isEmpty();
-        return isEmpty ? null : resultList.get(0);
+        List<GiftCertificate> resultList = jdbcTemplate.queryForStream(sql, new BeanPropertyRowMapper<>(GiftCertificate.class), "%" + parameter + "%")
+                                                        .collect(Collectors.toList());
+        if (resultList.isEmpty()){
+            throw new LocalException(HttpStatus.NOT_FOUND, "the requested resource is not found");
+        } else {
+            return resultList.get(0);
+        }
     }
 }

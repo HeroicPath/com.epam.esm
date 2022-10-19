@@ -1,3 +1,5 @@
+package com.epam.esm.app;
+
 import com.epam.esm.app.repository.GiftCertificateRepository;
 import com.epam.esm.app.repository.TagRepository;
 import com.epam.esm.app.repository.impl.GiftCertificateRepositoryImpl;
@@ -5,7 +7,9 @@ import com.epam.esm.app.repository.impl.TagRepositoryImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
 
@@ -13,14 +17,9 @@ import javax.sql.DataSource;
 public class TestConfig {
 
     @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:h2:mem:default");
-        dataSource.setDriverClassName("org.h2.Driver");
-        dataSource.setUsername("username");
-        dataSource.setPassword("password");
-
-        return dataSource;
+    public EmbeddedDatabase embeddedDatabase() {
+        EmbeddedDatabaseBuilder embeddedDatabaseBuilder = new EmbeddedDatabaseBuilder();
+        return embeddedDatabaseBuilder.setType(EmbeddedDatabaseType.H2).addDefaultScripts().build();
     }
 
     @Bean

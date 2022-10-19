@@ -15,12 +15,6 @@ public interface TagService {
     TagDto getById(Integer id);
 
     /**
-     * returns the TagDto by name
-     * @param name name of the requested entity
-     * @return DTO representation of requested entity
-     */
-    TagDto getByName(String name);
-    /**
      * creates new Tag with the given parameters
      * @param tagDto new Tag data
      */

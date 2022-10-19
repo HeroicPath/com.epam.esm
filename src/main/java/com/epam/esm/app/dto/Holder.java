@@ -1,7 +1,5 @@
-package com.epam.esm.app.model;
+package com.epam.esm.app.dto;
 
-import com.epam.esm.app.dto.GiftCertificateDto;
-import com.epam.esm.app.dto.TagDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Holder {

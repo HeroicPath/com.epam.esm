@@ -1,6 +1,7 @@
 package com.epam.esm.app.service.impl;
 
 import com.epam.esm.app.dto.TagDto;
+import com.epam.esm.app.exception.LocalException;
 import com.epam.esm.app.mapper.GiftCertificateMapper;
 import com.epam.esm.app.mapper.TagMapper;
 import com.epam.esm.app.model.GiftCertificate;
@@ -8,6 +9,8 @@ import com.epam.esm.app.model.Tag;
 import com.epam.esm.app.repository.GiftCertificateRepository;
 import com.epam.esm.app.repository.TagRepository;
 import com.epam.esm.app.service.TagService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +28,7 @@ public class TagServiceImpl implements TagService {
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateRepository giftCertificateRepository;
 
-    public TagServiceImpl(TagRepository repository, TagMapper mapper, GiftCertificateMapper gcMapper, JdbcTemplate template, GiftCertificateRepository giftCertificateRepository) {
+    public TagServiceImpl(@Qualifier("tagRepositoryImpl") TagRepository repository, TagMapper mapper, GiftCertificateMapper gcMapper, JdbcTemplate template, GiftCertificateRepository giftCertificateRepository) {
         this.tagRepository = repository;
         this.tagMapper = mapper;
         this.giftCertificateMapper = gcMapper;
@@ -40,16 +43,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDto getByName(String name) {
-        Tag tag = tagRepository.getByName(name);
-        return toDtoWithGiftCertificateDtos(tag, tag.getId());
-    }
-
-    @Override
     public void create(TagDto tagDto) {
-        if (tagDto.getName().trim().isEmpty()) {
-            return;
-        }
+        validateTagDto(tagDto);
         tagRepository.create(tagDto);
     }
 
@@ -64,9 +59,15 @@ public class TagServiceImpl implements TagService {
     }
 
     public TagDto toDtoWithGiftCertificateDtos(Tag tag, Integer id){
-        TagDto dto = tagMapper.toDto(tag);
+        TagDto tagDto = tagMapper.toDto(tag);
         List<GiftCertificate> list = getGiftCertificates(id);
-        dto.setGiftCertificateList(list.stream().map(giftCertificateMapper::toDto).collect(Collectors.toList()));
-        return dto;
+        tagDto.setGiftCertificateList(list.stream().map(giftCertificateMapper::toDto).collect(Collectors.toList()));
+        return tagDto;
+    }
+
+    public void validateTagDto(TagDto tagDto) {
+        if (tagDto.getName() == null || tagDto.getName().trim().length() < 1) {
+            throw new LocalException(HttpStatus.BAD_REQUEST, "Provide a name!");
+        }
     }
 }

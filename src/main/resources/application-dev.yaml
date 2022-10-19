@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/gift_certificates_db
+    username: postgres
+    password: Gates_222

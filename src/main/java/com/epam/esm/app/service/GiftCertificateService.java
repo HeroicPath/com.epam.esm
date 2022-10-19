@@ -18,7 +18,7 @@ public interface GiftCertificateService {
     GiftCertificateDto getById(Integer id);
 
     /**
-     * returns the GiftCertificateDto by name
+     * returns the GiftCertificateDto by name/description
      * @param parameter String parameter of the requested entity
      * @param parameterType type of the given parameter (name or description)
      * @return DTO representation of requested entity
