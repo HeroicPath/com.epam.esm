@@ -1,17 +1,14 @@
 -- TAGS TABLE --
-create table TAGS
+create table tags
 (
-    ID   INT UNIQUE ,
-    NAME VARCHAR,
-    constraint TAGS_PK
-        primary key (ID)
+    id   serial not null
+        constraint tags_pkey
+            primary key,
+    name varchar
 );
 
-create unique index TAGS_ID_UINDEX
-    on TAGS (ID);
-
-create unique index TAGS_NAME_UINDEX
-    on TAGS (NAME);
+create unique index tags_name_uindex
+    on tags (name);
 
 -- GIFT_CERTIFICATES TABLE --
 

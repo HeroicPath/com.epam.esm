@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Holder {
 
-    @JsonProperty("certificate")
+    @JsonProperty("giftCertificate")
     private GiftCertificateDto certificate;
 
     @JsonProperty("tag")

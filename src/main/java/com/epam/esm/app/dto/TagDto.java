@@ -13,6 +13,6 @@ public class TagDto {
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("list")
+    @JsonProperty("giftCertificatesList")
     private List<GiftCertificateDto> giftCertificateList;
 }

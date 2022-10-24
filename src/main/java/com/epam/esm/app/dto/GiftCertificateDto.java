@@ -21,6 +21,7 @@ public class GiftCertificateDto {
     @JsonProperty("duration")
     private Integer duration;
 
+    @JsonProperty("tagList")
     private List<Tag> tags;
 
     public GiftCertificateDto(String name, String description, Double price, Integer duration, List<Tag> tags) {

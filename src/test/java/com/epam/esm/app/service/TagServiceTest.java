@@ -75,8 +75,8 @@ class TagServiceTest {
 
     @Test
     void deleteByIdTest() {
-        tagService.deleteById(1);
+        tagService.deleteById(2);
 
-        Mockito.verify(tagRepository).deleteById(1);
+        Mockito.verify(tagRepository).deleteById(2);
     }
 }
